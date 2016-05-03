@@ -35,7 +35,6 @@ public class PccStar extends Pcc {
 			l.setMarquage(true) ; //on met le marquage du label a true s'il a déjà été enlevé du tas, cad qu'on connait sa valeur finale
 			nb_noeuds--;
 			Noeud n = l.getSommetCourant() ; 	
-			System.out.println("estimation + cout =" + (l.getEstimation() + l.getCout())) ; 
 
 			for (Route r : n.getRoutes()) {
 								

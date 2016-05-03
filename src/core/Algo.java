@@ -17,6 +17,6 @@ public abstract class Algo {
 	this.sortie = fichierSortie ;	
     }
     
-    public abstract Chemin run() ;
+    public abstract Chemin run() throws Exception ;
 
 }

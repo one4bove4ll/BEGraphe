@@ -5,7 +5,7 @@ import base.Readarg ;
 
 public class PccStar extends Pcc {
 
-    public PccStar(Graphe gr, PrintStream sortie, Readarg readarg) {
+    public PccStar(Graphe gr, PrintStream sortie, Readarg readarg) throws Exception {
 	super(gr, sortie, readarg) ;
     }
 

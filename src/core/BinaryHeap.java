@@ -226,7 +226,7 @@ public class BinaryHeap<E extends Comparable<E>> {
 	}
 
 	public void update(E el) { //Il faudra surement rajouter quelque chose pour les exceptions aussi
-		int index = this.array.indexOf(el);
+		int index = this.array.indexOf(el); //à la place des IndexOf on pourrait ajouter un hash map
 		this.percolateUp(index);
 		index = this.array.indexOf(el);
 		this.percolateDown(index);

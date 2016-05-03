@@ -26,7 +26,7 @@ public class Pcc extends Algo {
 	private static int nb_noeuds = 0 ; 
 	
 
-	public Pcc(Graphe gr, PrintStream sortie, Readarg readarg) {
+	public Pcc(Graphe gr, PrintStream sortie, Readarg readarg) throws Exception {
 		super(gr, sortie, readarg);
 
 		this.zoneOrigine = gr.getZone();
@@ -35,6 +35,11 @@ public class Pcc extends Algo {
 		// Demander la zone et le sommet destination.
 		this.zoneOrigine = gr.getZone();
 		this.destination = readarg.lireInt("Numero du sommet destination ? ");
+		
+		if(this.origine>gr.getNoeuds().length || this.destination>gr.getNoeuds().length || this.origine<0 || this.destination<0){
+			Exception e = new Exception("Un des noeuds n'est pas dans la carte.");
+			throw e ;
+		}
 		
 		System.out.println("Choississez le type de recherche : \n 1 - Plus rapide \n 2 - Plus court") ; 
 		this.choix = readarg.lireInt("Votre choix ?");
@@ -74,19 +79,19 @@ public class Pcc extends Algo {
 	}
 	
 	
-	public Chemin run() { 
+	public Chemin run() throws Exception{ 
 		return myrun(this.choix) ; 
 	}
 	
 	//le choix entre plus court et plus rapide est intégré dans myrun
-	public Chemin myrun(int choix) { //choix = 1 => fastest ;;;;; choix = 2 => shortest
+	public Chemin myrun(int choix) throws Exception{ //choix = 1 => fastest ;;;;; choix = 2 => shortest
 
 		System.out.println("Run PCC de " + zoneOrigine + ":" + origine
 				+ " vers " + zoneDestination + ":" + destination);
 
 		Chemin resultat = new Chemin() ;
 		boolean dest_found = false ; 
-		
+		Date date = new Date() ;
 			
 		do {
 			Label l = labels.deleteMin();
@@ -132,6 +137,12 @@ public class Pcc extends Algo {
 			}
 		} while((!labels.isEmpty()) && !dest_found ) ; 
 		
+		
+		if(!dest_found){
+			Exception e = new Exception("Il n'existe pas de chemin.");
+			throw e ;
+		}
+		
 		if (choix==1) {
 			System.out.println("Le temps de trajet minimal est de " + hmNoeudToLabel.get(n_destination).getCout() + " minutes.") ;
 		}
@@ -139,6 +150,9 @@ public class Pcc extends Algo {
 			System.out.println("La distance de trajet minimal est de " + hmNoeudToLabel.get(n_destination).getCout() + " mètres.") ;
 		}
 		System.out.println("Nombre maximal de noeuds dans le tas : " + nb_noeuds_max) ; 
+		Date date2 = new Date() ;
+		long duree = date2.getTime() - date.getTime() ;
+		System.out.println("La recherche a duré " + duree/1000.0+" secondes.");
 		
 		//rajouter un THROW si jamais on est sorti du while parce que le tas était vide mais qu'on avait pas trouvé la destination
 		//ce THROW est peut-etre identique à celui qui est dans le else du if(dest_found)...

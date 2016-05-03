@@ -4,7 +4,7 @@ public class Route {
 
 	// attributs
 	///private int num_zone;
-	private float distance;
+	private double distance;
 	private base.Descripteur descripteur;
 	private Noeud successeur;
 	
@@ -17,7 +17,7 @@ public class Route {
 		
 	}
 	
-	public float getDistance() {
+	public double getDistance() {
 		return distance ;
 	}
 	

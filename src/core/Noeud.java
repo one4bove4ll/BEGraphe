@@ -64,11 +64,11 @@ public class Noeud {
 	}
 	
 	public Route findFastestRoute(Noeud dest){
-		float min_time = Float.MAX_VALUE; 
+		double min_time = Float.MAX_VALUE; 
 		Route resultat = null ;
 		
 		for (Route current : routes) {
-			float cur_time = current.getDistance() / (float) current.getDescripteur().vitesseMax();
+			double cur_time = current.getDistance() / (float) current.getDescripteur().vitesseMax();
 			if(current.getSucc() == dest && cur_time <= min_time){
 				min_time = cur_time ;
 				resultat = current ;
@@ -80,7 +80,7 @@ public class Noeud {
 	}
 	
 	public Route findShortestRoute(Noeud dest){
-		float distance = Float.MAX_VALUE; 
+		double distance = Float.MAX_VALUE; 
 		Route resultat = null ;
 		
 		for (Route current : routes) {

@@ -82,7 +82,7 @@ public class Launch {
 				case 1 : algo = new Connexite(graphe, this.fichierSortie (), this.readarg) ; break ;
 
 				case 2 : algo = new Pcc(graphe, this.fichierSortie (), this.readarg) ; break ;
-				
+
 				case 3 : algo = new PccStar(graphe, this.fichierSortie (), this.readarg) ; break ;
 
 				case 4 : graphe.situerClick() ; break ;
@@ -100,7 +100,9 @@ public class Launch {
 				if (algo != null) { 
 					resultat=algo.run() ;
 					dessin.setColor(java.awt.Color.magenta);
-					dessin.setWidth(4) ; 
+					dessin.setWidth(4) ;
+					if(resultat == null)
+						System.out.println("Le chemin est nul");
 					resultat.afficherChemin(dessin);
 				}
 			}

@@ -1,6 +1,7 @@
 package core ;
 
 import java.io.* ;
+//import java.util.* ; 
 import base.* ;
 
 /**
@@ -10,6 +11,7 @@ public abstract class Algo {
 
     protected PrintStream sortie ;
     protected Graphe graphe ;
+    protected long duree ; 
     
     
     protected Algo(Graphe gr, PrintStream fichierSortie, Readarg readarg) {
@@ -17,6 +19,10 @@ public abstract class Algo {
 	this.sortie = fichierSortie ;	
     }
     
-    public abstract Chemin run() throws Exception ;
-
+    public abstract Result run() throws Exception ;
+    
+    public long getDuree() {
+    	return this.duree ;
+    }
+    
 }

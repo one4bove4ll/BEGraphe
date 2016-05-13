@@ -32,7 +32,7 @@ public class Graphe {
 	private int numzone;
 
 	private Noeud[] noeuds;
-	
+
 	public Noeud[] getNoeuds() {
 		return noeuds ;
 	}
@@ -54,6 +54,11 @@ public class Graphe {
 	public int getZone() {
 		return numzone;
 	}
+
+	public String getNomCarte() {
+		return nomCarte;
+	}
+
 
 	// Le constructeur cree le graphe en lisant les donnees depuis le
 	// DataInputStream
@@ -100,7 +105,7 @@ public class Graphe {
 				// Lecture du noeud numero num_node
 				//longitudes[num_node] = ((float) dis.readInt()) / 1E6f;
 				//latitudes[num_node] = ((float) dis.readInt()) / 1E6f;
-				
+
 				//int valeur = dis.readUnsignedByte();
 				noeuds[num_node] = new Noeud(num_node,(((float) dis.readInt()) / 1E6f), (((float) dis.readInt()) / 1E6f));
 				nsuccesseurs_a_lire[num_node] = dis.readUnsignedByte();
@@ -115,11 +120,11 @@ public class Graphe {
 				descripteurs[num_descr] = new Descripteur(dis);
 
 				// On affiche quelques descripteurs parmi tous.
-				if (0 == num_descr % (1 + nb_descripteurs / 400))
+				/*if (0 == num_descr % (1 + nb_descripteurs / 400))
 					System.out.println("Descripteur " + num_descr + " = "
-							+ descripteurs[num_descr]);
+							+ descripteurs[num_descr]);*/
 			}
-			
+
 			/*for(Descripteur d : descripteurs){
 				if(d.getNom().toLowerCase().contains("route de pau")){
 					System.out.println(d.getNom());
@@ -142,16 +147,16 @@ public class Graphe {
 
 					// descripteur de l'arete
 					int descr_num = Utils.read24bits(dis);
-					
+
 					// longueur de l'arete en metres
 					int longueur = dis.readUnsignedShort();
 
 					// Nombre de segments constituant l'arete
 					int nb_segm = dis.readUnsignedShort();
-					
+
 					edges++;
 
-					
+
 					Couleur.set(dessin, descripteurs[descr_num].getType());
 
 					float current_long = noeuds[num_node].getlong();
@@ -174,7 +179,7 @@ public class Graphe {
 					if (succ_zone == numzone) {
 						dessin.drawLine(current_long, current_lat,
 								noeuds[dest_node].getlong(), noeuds[dest_node].getlat());
-						
+
 						noeuds[num_node].addSuccesseur(new Route(longueur,descripteurs[descr_num],noeuds[dest_node]));
 						//cas d'une route à double sens
 						if(!descripteurs[descr_num].isSensUnique()){
@@ -193,6 +198,8 @@ public class Graphe {
 			e.printStackTrace();
 			System.exit(1);
 		}
+
+
 
 	}
 
@@ -309,10 +316,10 @@ public class Graphe {
 				chem.addNoeud(noeuds[current_node]);
 				System.out.println(" --> " + current_zone + ":" + current_node);
 			}
-			
+
 			System.out.println("Le temps de parcours est "+chem.tempsDeParcours());
 			chem.afficherChemin(dessin);
-			
+
 			if ((current_zone != last_zone) || (current_node != last_node)) {
 				System.out.println("Le chemin " + nom_chemin
 						+ " ne termine pas sur le bon noeud.");
@@ -323,6 +330,47 @@ public class Graphe {
 			e.printStackTrace();
 			System.exit(1);
 		}
+
+	}
+
+
+	public void FileTestCreationRandom(String nomCarte, boolean affichage, int choixAlgo, int choixChemin, int nb_tests) {
+		System.out.print("Création du fichier de test....") ; 
+		File f = new File ("valeurtest.txt");
+
+		try
+		{
+			FileWriter fw = new FileWriter (f);
+			int nb_noeuds = this.noeuds.length ; 
+
+			fw.write (nomCarte); fw.write(" ") ; 
+			if (affichage) {
+				fw.write (String.valueOf (1));
+			}
+			else {
+				fw.write (String.valueOf (0));
+			}
+			fw.write("\r\n") ; 
+			
+			int range = (int) nb_noeuds/10 ;
+			System.out.println("range =" + range) ; 
+
+			for (int i = 1 ; i <= nb_tests ; i++) {
+							fw.write (String.valueOf (choixAlgo)); fw.write(" ") ; 
+							fw.write(String.valueOf (0)) ; fw.write(" ") ; 
+							fw.write (String.valueOf ((int)(Math.random()*(nb_noeuds-1)))); fw.write(" ") ; 
+							fw.write (String.valueOf ((int)(Math.random()*(nb_noeuds-1)))); fw.write(" ") ; 
+							fw.write (String.valueOf (choixChemin));
+							fw.write("\r\n") ; 
+			}
+			fw.write(String.valueOf(0));
+			fw.close();
+		}
+		catch (IOException exception)
+		{
+			System.out.println ("Erreur lors de la lecture : " + exception.getMessage());
+		}
+		System.out.println("Terminée ! ") ; 
 
 	}
 

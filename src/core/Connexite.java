@@ -9,7 +9,7 @@ public class Connexite extends Algo {
 	super(gr, sortie, readarg) ;
     }
 
-    public Chemin run() {
+    public Result run() {
 	// A vous d'implementer la recherche de connexite.
     	return null; 
     }

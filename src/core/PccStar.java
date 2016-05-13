@@ -13,7 +13,7 @@ public class PccStar extends Pcc {
 		this.hmNoeudToLabel.put(n_origine, new Label(false, 0,null, n_origine,(float)Graphe.distance(n_origine.getlong(), n_origine.getlat(), n_destination.getlong(), n_destination.getlat()))) ;
 	}
 
-	public Chemin run() throws Exception {
+	public Result run() throws Exception {
 
 		System.out.println("Run PCC-Star de " + zoneOrigine + ":" + origine + " vers " + zoneDestination + ":" + destination) ;
 
@@ -24,7 +24,7 @@ public class PccStar extends Pcc {
 	
 	
 	
-	public Chemin myrun(int choix) throws Exception{ //choix = 1 => fastest ;;;;; choix = 2 => shortest
+	public Result myrun(int choix) throws Exception{ //choix = 1 => fastest ;;;;; choix = 2 => shortest
 
 		Chemin resultat = new Chemin() ;
 		boolean dest_found = false ; 
@@ -57,8 +57,8 @@ public class PccStar extends Pcc {
 					hmNoeudToLabel.put(r.getSucc(), l_succ) ; 
 					labels.insert(l_succ) ; 
 					nb_noeuds++ ; 
-					this.graphe.getDessin().setColor(Color.cyan) ; 
-					this.graphe.getDessin().drawPoint(l.getSommetCourant().getlong(), l.getSommetCourant().getlat(), 2) ;
+					this.graphe.getDessin().setColor(Color.green) ; 
+					//this.graphe.getDessin().drawPoint(l.getSommetCourant().getlong(), l.getSommetCourant().getlat(), 2) ;
 
 					if (nb_noeuds > nb_noeuds_max) {
 						nb_noeuds_max = nb_noeuds ; 
@@ -94,8 +94,8 @@ public class PccStar extends Pcc {
 		}
 		System.out.println("Nombre maximal de noeuds dans le tas : " + nb_noeuds_max) ; 
 		Date date2 = new Date() ;
-		long duree = date2.getTime() - date.getTime() ;
-		System.out.println("La recherche a duré " + duree/1000.0+" secondes.");
+		this.duree = (date2.getTime() - date.getTime()) ;
+		System.out.println("La recherche a duré " + this.duree/1000.0+" secondes.");
 
 		
 		//if(dest_found){ inutile car on le teste au dessus avec l'exception
@@ -111,8 +111,7 @@ public class PccStar extends Pcc {
 				go_on = false ;
 			}
 		} while(go_on) ; 
-		return resultat ;
-		//} 
+		return new Result(resultat, this.duree, hmNoeudToLabel.get(n_destination).getCout(), nb_noeuds_max) ;
 
 	}
 

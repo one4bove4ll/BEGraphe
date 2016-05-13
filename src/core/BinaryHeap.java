@@ -10,7 +10,7 @@ package core;
 
 import java.util.*;
 
-import javax.swing.event.DocumentEvent.ElementChange;
+//import javax.swing.event.DocumentEvent.ElementChange;
 
 /**
  * Implements a binary heap. Note that all "matching" is based on the compareTo

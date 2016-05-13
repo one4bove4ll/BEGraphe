@@ -49,16 +49,25 @@ public class Pcc extends Algo {
 		n_destination = noeuds[destination] ; 
 		this.hmNoeudToLabel.put(n_origine, new Label(false, 0,null, n_origine)) ;
 		this.labels.insert(hmNoeudToLabel.get(n_origine)) ; 
+		//gr.FileTestCreation(gr.getNomCarte(), 2, this.choix) ; 
 
+	}
+	
+	public int getOrigine() {
+		return this.origine ; 
+	}
+	
+	public int getDest() {
+		return this.destination ; 
 	}
 
 
-	public Chemin run() throws Exception{ 
+	public Result run() throws Exception{ 
 		return myrun(this.choix) ; 
 	}
 
 	//le choix entre plus court et plus rapide est intégré dans myrun
-	public Chemin myrun(int choix) throws Exception{ //choix = 1 => fastest ;;;;; choix = 2 => shortest
+	public Result myrun(int choix) throws Exception{ //choix = 1 => fastest ;;;;; choix = 2 => shortest
 
 		System.out.println("Run PCC de " + zoneOrigine + ":" + origine
 				+ " vers " + zoneDestination + ":" + destination);
@@ -113,8 +122,7 @@ public class Pcc extends Algo {
 
 
 		if(!dest_found){
-			Exception e = new Exception("Il n'existe pas de chemin.");
-			throw e ;
+			throw (new Exception("Il n'existe pas de chemin.")); 
 		}
 
 		if (choix==1) {
@@ -125,8 +133,9 @@ public class Pcc extends Algo {
 		}
 		System.out.println("Nombre maximal de noeuds dans le tas : " + nb_noeuds_max) ; 
 		Date date2 = new Date() ;
-		long duree = date2.getTime() - date.getTime() ;
-		System.out.println("La recherche a duré " + duree/1000.0+" secondes.");
+		this.duree = date2.getTime() - date.getTime() ;
+		System.out.println("La recherche a duré " + this.duree/1000.0+" secondes.");
+		
 
 		
 		//if(dest_found){ inutile car on le teste au dessus avec l'exception
@@ -142,8 +151,8 @@ public class Pcc extends Algo {
 				go_on = false ;
 			}
 		} while(go_on) ; 
-		return resultat ;
-		//} 
+		return new Result(resultat, this.duree, hmNoeudToLabel.get(n_destination).getCout(), nb_noeuds_max) ;
+		
 
 	}	
 }

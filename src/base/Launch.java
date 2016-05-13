@@ -35,6 +35,8 @@ public class Launch {
 		System.out.println ("3 - Plus court chemin A-star") ;
 		System.out.println ("4 - Cliquer sur la carte pour obtenir un numero de sommet.") ;
 		System.out.println ("5 - Charger un fichier de chemin (.path) et le verifier.") ;
+		System.out.println ("6 - Générer un fichier de chemins de test aléatoire.") ;
+
 
 		System.out.println () ;
 	}
@@ -47,7 +49,9 @@ public class Launch {
 
 	public void go() {
 
+		File f = new File("resultat.txt") ; 
 		try {
+			FileWriter fw = new FileWriter (f); 
 			System.out.println ("**") ;
 			System.out.println ("** Programme de test des algorithmes de graphe.");
 			System.out.println ("**") ;
@@ -91,23 +95,37 @@ public class Launch {
 					String nom_chemin = this.readarg.lireString ("Nom du fichier .path contenant le chemin ? ") ;
 					graphe.verifierChemin(Openfile.open (nom_chemin), nom_chemin) ;
 					break ;
-
+				case 6 : 					
+					int  algotest = this.readarg.lireInt("Choix de l'algo ? \n 2 : Djikstra \n 3 : A*\n") ;
+					int cheminTest = this.readarg.lireInt ("Choix de la méthode? \n 1 : Plus court \n 2 : Plus rapide\n") ;
+					int nb_test = this.readarg.lireInt ("Combien de tests ?\n") ;
+					graphe.FileTestCreationRandom(nomcarte, display, algotest, cheminTest, nb_test) ;
+					break;
 				default:
 					System.out.println ("Choix de menu incorrect : " + choix) ;
 					System.exit(1) ;
 				}
-				Chemin resultat = null ;
+				Result resultat = null ;
 				if (algo != null) { 
-					resultat=algo.run() ;
-					dessin.setColor(java.awt.Color.magenta);
-					dessin.setWidth(4) ;
-					if(resultat == null)
+					try{
+						resultat=algo.run() ;
+						dessin.setColor(java.awt.Color.magenta);
+						dessin.setWidth(4) ;
+						fw.write("Duree Recherche : " + String.format("%10d", algo.getDuree() ) + " | Nb de noeuds maximum : " + String.format("%10d", resultat.getNbNoeuds() ) + " | Coût calculé (temps ou distance minimum) : " +  resultat.getCout()) ; fw.write("\r\n") ; 
+					if(resultat.getChemin() == null) {
 						System.out.println("Le chemin est nul");
-					resultat.afficherChemin(dessin);
+					} 
+					
+					resultat.getChemin().afficherChemin(dessin);
+					} catch(Exception e){
+						fw.write("Impossible de calculer le chemin") ; fw.write("\r\n") ; 
+						System.out.println("Impossible de calculer le chemin : "+ e.getMessage());
+					}
 				}
 			}
 
 			System.out.println ("Programme terminé.") ;
+			fw.close() ; 
 			System.exit(0) ;
 
 

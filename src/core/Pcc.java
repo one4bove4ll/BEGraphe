@@ -25,7 +25,8 @@ public class Pcc extends Algo {
 	protected static int nb_noeuds_max = 0 ; 
 	protected static int nb_noeuds = 0 ; 
 
-
+	protected ArrayList<Label> listLabels = new ArrayList<Label>();
+	
 	public Pcc(Graphe gr, PrintStream sortie, Readarg readarg) throws Exception {
 		super(gr, sortie, readarg);
 
@@ -49,9 +50,33 @@ public class Pcc extends Algo {
 		n_destination = noeuds[destination] ; 
 		this.hmNoeudToLabel.put(n_origine, new Label(false, 0,null, n_origine)) ;
 		this.labels.insert(hmNoeudToLabel.get(n_origine)) ; 
-		//gr.FileTestCreation(gr.getNomCarte(), 2, this.choix) ; 
-
 	}
+	
+	public Pcc(Graphe gr, PrintStream sortie, Readarg readarg, int origine, int destination) throws Exception {
+		super(gr, sortie, readarg);
+		this.graphe = gr ;
+		this.origine = origine ;
+		this.destination = destination ;
+		
+		
+		if(this.origine>gr.getNoeuds().length || this.destination>gr.getNoeuds().length || this.origine<0 || this.destination<0){
+			Exception e = new Exception("Un des noeuds n'est pas dans la carte.");
+			throw e ;
+		}
+		
+		Noeud[] noeuds = gr.getNoeuds() ;
+		n_origine = noeuds[origine] ; 
+		n_destination = noeuds[destination] ; 
+		this.hmNoeudToLabel.put(n_origine, new Label(false, 0,null, n_origine)) ;
+		this.labels.insert(hmNoeudToLabel.get(n_origine)) ;
+		
+		
+	}
+	
+	public HashMap<Noeud, Label> getHM() {
+		return hmNoeudToLabel ;
+	}
+
 	
 	public int getOrigine() {
 		return this.origine ; 
@@ -61,13 +86,21 @@ public class Pcc extends Algo {
 		return this.destination ; 
 	}
 
+	public ArrayList<Label> getListLabels(){
+		return this.listLabels ;
+	}
+	
 
 	public Result run() throws Exception{ 
 		return myrun(this.choix) ; 
 	}
 
+	public Result runCovoiturage() throws Exception {
+		return myrun(2);
+	}
+	
 	//le choix entre plus court et plus rapide est intégré dans myrun
-	public Result myrun(int choix) throws Exception{ //choix = 1 => fastest ;;;;; choix = 2 => shortest
+	public Result myrun(int choix ) throws Exception{ //choix = 1 => fastest ;;;;; choix = 2 => shortest
 
 		System.out.println("Run PCC de " + zoneOrigine + ":" + origine
 				+ " vers " + zoneDestination + ":" + destination);
@@ -79,6 +112,7 @@ public class Pcc extends Algo {
 		do {
 			Label l = labels.deleteMin();
 			l.setMarquage(true) ; //on met le marquage du label a true s'il a déjà été enlevé du tas, cad qu'on connait sa valeur finale
+			listLabels.add(l);
 			nb_noeuds--;
 			Noeud n = l.getSommetCourant() ; 	
 			for (Route r : n.getRoutes()) {
@@ -91,6 +125,7 @@ public class Pcc extends Algo {
 				else { //shortest
 					new_cost = r.getDistance() + l.getCout() ;
 				}
+				
 
 				if (!(hmNoeudToLabel.containsKey(r.getSucc()))) { //s'il n'est pas dans la hashmap, il faut créer le label et l'ajouter a la hashmap et dans le tas 
 					Label l_succ = new Label(false, new_cost, n, r.getSucc()) ;  

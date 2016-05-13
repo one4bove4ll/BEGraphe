@@ -9,20 +9,20 @@ import base.* ;
  */
 public abstract class Algo {
 
-    protected PrintStream sortie ;
-    protected Graphe graphe ;
-    protected long duree ; 
-    
-    
-    protected Algo(Graphe gr, PrintStream fichierSortie, Readarg readarg) {
-	this.graphe = gr ;
-	this.sortie = fichierSortie ;	
-    }
-    
-    public abstract Result run() throws Exception ;
-    
-    public long getDuree() {
-    	return this.duree ;
-    }
-    
+	protected PrintStream sortie ;
+	protected Graphe graphe ;
+	protected long duree ; 
+
+
+	protected Algo(Graphe gr, PrintStream fichierSortie, Readarg readarg) {
+		this.graphe = gr ;
+		this.sortie = fichierSortie ;	
+	}
+
+	public abstract Result run() throws Exception ;
+
+	public long getDuree() {
+		return this.duree ;
+	}
+
 }

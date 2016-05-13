@@ -13,23 +13,31 @@ public class PccStar extends Pcc {
 		this.hmNoeudToLabel.put(n_origine, new Label(false, 0,null, n_origine,(float)Graphe.distance(n_origine.getlong(), n_origine.getlat(), n_destination.getlong(), n_destination.getlat()))) ;
 	}
 
+	public PccStar(Graphe gr, PrintStream sortie, Readarg readarg, int origine, int destination) throws Exception {
+		super(gr,sortie,readarg,origine,destination);
+		this.hmNoeudToLabel.put(n_origine, new Label(false, 0,null, n_origine,(float)Graphe.distance(n_origine.getlong(), n_origine.getlat(), n_destination.getlong(), n_destination.getlat()))) ;
+
+	}
+	
+	public void setOrigine(int ori) {
+		this.origine = ori ;
+	}
+
 	public Result run() throws Exception {
 
 		System.out.println("Run PCC-Star de " + zoneOrigine + ":" + origine + " vers " + zoneDestination + ":" + destination) ;
 
 		return myrun(this.choix) ; 
 
-		// A vous d'implementer la recherche de plus court chemin A*
 	}
-	
-	
-	
+
+
+
 	public Result myrun(int choix) throws Exception{ //choix = 1 => fastest ;;;;; choix = 2 => shortest
 
 		Chemin resultat = new Chemin() ;
 		boolean dest_found = false ; 
 		Date date = new Date() ;
-
 		do {
 			Label l = labels.deleteMin();
 			l.setMarquage(true) ; //on met le marquage du label a true s'il a déjà été enlevé du tas, cad qu'on connait sa valeur finale
@@ -37,7 +45,7 @@ public class PccStar extends Pcc {
 			Noeud n = l.getSommetCourant() ; 	
 
 			for (Route r : n.getRoutes()) {
-								
+
 				double new_cost ; 
 				double estimation ; 
 				if (choix==1) { //fastest
@@ -49,16 +57,16 @@ public class PccStar extends Pcc {
 					new_cost = r.getDistance() + l.getCout() ;
 					estimation = Graphe.distance(r.getSucc().getlong(), r.getSucc().getlat(), n_destination.getlong(), n_destination.getlat()) ; 
 				}
-				
-				
-				
+
+
+
 				if (!(hmNoeudToLabel.containsKey(r.getSucc()))) { //s'il n'est pas dans la hashmap, il faut créer le label et l'ajouter a la hashmap et dans le tas 
 					Label l_succ = new Label(false, new_cost, n, r.getSucc(), estimation) ;  
 					hmNoeudToLabel.put(r.getSucc(), l_succ) ; 
 					labels.insert(l_succ) ; 
 					nb_noeuds++ ; 
 					this.graphe.getDessin().setColor(Color.green) ; 
-					//this.graphe.getDessin().drawPoint(l.getSommetCourant().getlong(), l.getSommetCourant().getlat(), 2) ;
+					this.graphe.getDessin().drawPoint(l.getSommetCourant().getlong(), l.getSommetCourant().getlat(), 2) ;
 
 					if (nb_noeuds > nb_noeuds_max) {
 						nb_noeuds_max = nb_noeuds ; 
@@ -97,7 +105,7 @@ public class PccStar extends Pcc {
 		this.duree = (date2.getTime() - date.getTime()) ;
 		System.out.println("La recherche a duré " + this.duree/1000.0+" secondes.");
 
-		
+
 		//if(dest_found){ inutile car on le teste au dessus avec l'exception
 		Noeud n = n_destination ; 
 		resultat.ajouterAuDebut(n);

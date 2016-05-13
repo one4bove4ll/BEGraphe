@@ -36,6 +36,7 @@ public class Launch {
 		System.out.println ("4 - Cliquer sur la carte pour obtenir un numero de sommet.") ;
 		System.out.println ("5 - Charger un fichier de chemin (.path) et le verifier.") ;
 		System.out.println ("6 - Générer un fichier de chemins de test aléatoire.") ;
+		System.out.println ("7 - Organiser un covoiturage. ") ;
 
 
 		System.out.println () ;
@@ -101,6 +102,11 @@ public class Launch {
 					int nb_test = this.readarg.lireInt ("Combien de tests ?\n") ;
 					graphe.FileTestCreationRandom(nomcarte, display, algotest, cheminTest, nb_test) ;
 					break;
+				case 7 :
+					if (graphe == null)
+						System.out.println("graphe null ") ; 
+					algo = new Covoiturage(graphe, this.fichierSortie(), this.readarg);
+					break ;
 				default:
 					System.out.println ("Choix de menu incorrect : " + choix) ;
 					System.exit(1) ;
@@ -115,8 +121,21 @@ public class Launch {
 					if(resultat.getChemin() == null) {
 						System.out.println("Le chemin est nul");
 					} 
+					if(resultat instanceof ResultCovoiturage){
+						
+						dessin.setColor(java.awt.Color.magenta);
+						dessin.setWidth(2) ;
+						((ResultCovoiturage) resultat).getChemin().afficherChemin(dessin);
+						dessin.setColor(java.awt.Color.blue) ; 
+						dessin.setWidth(2) ;
+						((ResultCovoiturage) resultat).getCheminPieton().afficherChemin(dessin);
+						dessin.setColor(java.awt.Color.pink) ; 
+						((ResultCovoiturage) resultat).getCheminVoiture().afficherChemin(dessin);
+
+					}else{
+						resultat.getChemin().afficherChemin(dessin);
+					}
 					
-					resultat.getChemin().afficherChemin(dessin);
 					} catch(Exception e){
 						fw.write("Impossible de calculer le chemin") ; fw.write("\r\n") ; 
 						System.out.println("Impossible de calculer le chemin : "+ e.getMessage());

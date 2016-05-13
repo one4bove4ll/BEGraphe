@@ -44,6 +44,7 @@ public class Graphe {
 	 */
 	//private float[] longitudes;
 	//private float[] latitudes;
+
 	private Descripteur[] descripteurs;
 
 	// Deux malheureux getters.
@@ -330,7 +331,6 @@ public class Graphe {
 			e.printStackTrace();
 			System.exit(1);
 		}
-
 	}
 
 

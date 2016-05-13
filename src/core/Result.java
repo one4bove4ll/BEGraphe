@@ -2,13 +2,13 @@ package core;
 
 public class Result {
 
-	private Chemin chem ; 
+	protected Chemin chem ; 
 
-	private long tempsCalcul ; 
+	protected long tempsCalcul ; 
 
-	private double cout ; 
+	protected double cout ; 
 
-	private int nb_noeuds ; 
+	protected int nb_noeuds ; 
 
 
 	public Result(Chemin chem, long tempsCalcul, double cout, int nb_noeuds) {

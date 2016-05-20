@@ -1,8 +1,11 @@
 package core;
 
+import java.awt.Color;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.* ; 
+import java.util.* ; 
 
 import base.Readarg;
 
@@ -68,21 +71,23 @@ public class Covoiturage extends Algo{
 		for(Label l : listeFusion){
 			if(l.getCout()<labelMin.getCout() && l.getSommetCourant().getId()!=departVoiture){
 				labelMin = l ;
-				System.out.println("je suis dans le if pour le noeud " + l.getSommetCourant().getId()) ; 
 			}
 		}
 		
 		n_rencontre = labelMin.getSommetCourant() ;
 		rencontre = n_rencontre.getId() ;
-		System.out.println("Le noeud de rencontre a pour identifiant : " + rencontre);
+		System.out.println("Le noeud de rencontre a pour identifiant : " + rencontre + " le temps pour y parvenit est : " + labelMin.getCout() + "minutes. ");
 		covoit.setOrigine(rencontre) ;
-
-
-		Result rCovoit = (new PccStar(this.graphe,this.sortie,this.readarg,rencontre,destination)).run() ;
 		
-		rPieton = (new PccStar(this.graphe,this.sortie,this.readarg,this.departPieton,rencontre)).run();
-		rVoiture= (new PccStar(this.graphe,this.sortie,this.readarg,this.departVoiture,rencontre)).run();
 
+		Result rCovoit = (new PccStar(this.graphe,this.sortie,this.readarg,rencontre,destination)).runFastest() ;
+		
+		rPieton = (new PccPieton(this.graphe,this.sortie,this.readarg,this.departPieton,n_rencontre.getId())).run();
+		rVoiture= (new PccStar(this.graphe,this.sortie,this.readarg,this.departVoiture,n_rencontre.getId())).runFastest();
+
+		graphe.getDessin().setColor(Color.black) ; 
+		graphe.getDessin().putText(n_rencontre.getlong(), n_rencontre.getlat(), "Noeud de rencontre : " + n_rencontre.getId());
+		
 		return new ResultCovoiturage(rCovoit.getChemin(), 0, 0, 0, rVoiture.getChemin(), rPieton.getChemin()) ; 
 	}
 

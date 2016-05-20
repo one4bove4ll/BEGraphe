@@ -10,14 +10,14 @@ import base.Readarg;
 
 public class PccPieton extends Pcc {
 
-	private static int vitesseMax = 100 ;
-	
+	private static int vitesseMax = 50 ;
+
 
 	public PccPieton(Graphe gr, PrintStream sortie, Readarg readarg, int origine, int destination) throws Exception{
 		super(gr,sortie,readarg,origine,destination);
 
 	}
-	
+
 
 
 	public Result run() throws Exception{
@@ -38,17 +38,18 @@ public class PccPieton extends Pcc {
 			for (Route r : n.getRoutes()) {
 				if(r.getDescripteur().vitesseMax()<110){
 					double new_cost ; 
-
-					new_cost = 36.0 * r.getDistance()/(600 * vitesseMax) + l.getCout() ; //le cout du noeud successeur en passant par le noeud n
+					//new_cost = 36.0 * r.getDistance()/(600 * r.getDescripteur().vitesseMax()) + l.getCout() ; //le cout du noeud successeur en passant par le noeud n
+					//System.out.println("Vitesse max  : " + r.getDescripteur().vitesseMax() + "cour nomal : "+new_cost);
+					new_cost = 36.0 * r.getDistance()/(600 * Math.min(vitesseMax, r.getDescripteur().vitesseMax())) + l.getCout() ; //le cout du noeud successeur en passant par le noeud n
 					//en minutes 
-
+					//System.out.println("PCC Piéton :" + new_cost) ; 
 					if (!(hmNoeudToLabel.containsKey(r.getSucc()))) { //s'il n'est pas dans la hashmap, il faut créer le label et l'ajouter a la hashmap et dans le tas 
 						Label l_succ = new Label(false, new_cost, n, r.getSucc()) ;  
 						hmNoeudToLabel.put(r.getSucc(), l_succ) ; 
 						labels.insert(l_succ) ; 
 						nb_noeuds++ ; 
-						this.graphe.getDessin().setColor(Color.cyan) ; 
-						this.graphe.getDessin().drawPoint(l.getSommetCourant().getlong(), l.getSommetCourant().getlat(), 2) ;
+						//this.graphe.getDessin().setColor(Color.cyan) ; 
+						//this.graphe.getDessin().drawPoint(l.getSommetCourant().getlong(), l.getSommetCourant().getlat(), 2) ;
 
 						if (nb_noeuds > nb_noeuds_max) {
 							nb_noeuds_max = nb_noeuds ; 
@@ -76,12 +77,12 @@ public class PccPieton extends Pcc {
 			throw (new Exception("Il n'existe pas de chemin.")); 
 		}
 
-		if (choix==1) {
-			System.out.println("Le temps de trajet minimal est de " + hmNoeudToLabel.get(n_destination).getCout() + " minutes.") ;
-		}
+		//if (choix==1) {
+		System.out.println("Le temps de trajet minimal est de " + hmNoeudToLabel.get(n_destination).getCout() + " minutes.") ;
+		/*}
 		else {
 			System.out.println("La distance de trajet minimal est de " + hmNoeudToLabel.get(n_destination).getCout() + " mètres.") ;
-		}
+		}*/
 		System.out.println("Nombre maximal de noeuds dans le tas : " + nb_noeuds_max) ; 
 		Date date2 = new Date() ;
 		this.duree = date2.getTime() - date.getTime() ;

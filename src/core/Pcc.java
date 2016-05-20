@@ -96,7 +96,7 @@ public class Pcc extends Algo {
 	}
 
 	public Result runCovoiturage() throws Exception {
-		return myrun(2);
+		return myrun(1);
 	}
 	
 	//le choix entre plus court et plus rapide est intégré dans myrun
@@ -125,6 +125,8 @@ public class Pcc extends Algo {
 				else { //shortest
 					new_cost = r.getDistance() + l.getCout() ;
 				}
+				
+				//System.out.println("PCC Voiture : " + new_cost) ; 
 				
 
 				if (!(hmNoeudToLabel.containsKey(r.getSucc()))) { //s'il n'est pas dans la hashmap, il faut créer le label et l'ajouter a la hashmap et dans le tas 

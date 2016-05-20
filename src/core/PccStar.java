@@ -31,7 +31,11 @@ public class PccStar extends Pcc {
 
 	}
 
+	public Result runFastest() throws Exception {
+		System.out.println("Run PCC-Star de " + zoneOrigine + ":" + origine + " vers " + zoneDestination + ":" + destination) ;
 
+		return myrun(1) ; 
+	}
 
 	public Result myrun(int choix) throws Exception{ //choix = 1 => fastest ;;;;; choix = 2 => shortest
 

@@ -334,44 +334,6 @@ public class Graphe {
 	}
 
 
-	public void FileTestCreationRandom(String nomCarte, boolean affichage, int choixAlgo, int choixChemin, int nb_tests) {
-		System.out.print("Création du fichier de test....") ; 
-		File f = new File ("valeurtest.txt");
-
-		try
-		{
-			FileWriter fw = new FileWriter (f);
-			int nb_noeuds = this.noeuds.length ; 
-
-			fw.write (nomCarte); fw.write(" ") ; 
-			if (affichage) {
-				fw.write (String.valueOf (1));
-			}
-			else {
-				fw.write (String.valueOf (0));
-			}
-			fw.write("\r\n") ; 
-			
-			int range = (int) nb_noeuds/10 ;
-			System.out.println("range =" + range) ; 
-
-			for (int i = 1 ; i <= nb_tests ; i++) {
-							fw.write (String.valueOf (choixAlgo)); fw.write(" ") ; 
-							fw.write(String.valueOf (0)) ; fw.write(" ") ; 
-							fw.write (String.valueOf ((int)(Math.random()*(nb_noeuds-1)))); fw.write(" ") ; 
-							fw.write (String.valueOf ((int)(Math.random()*(nb_noeuds-1)))); fw.write(" ") ; 
-							fw.write (String.valueOf (choixChemin));
-							fw.write("\r\n") ; 
-			}
-			fw.write(String.valueOf(0));
-			fw.close();
-		}
-		catch (IOException exception)
-		{
-			System.out.println ("Erreur lors de la lecture : " + exception.getMessage());
-		}
-		System.out.println("Terminée ! ") ; 
-
-	}
+	
 
 }
